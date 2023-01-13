@@ -1,0 +1,72 @@
+@startuml
+
+title Database entities
+
+class User {
+    id
+    name
+    password
+    role
+}
+
+class Customer {
+    id
+    name
+}
+
+User <|-- Customer
+
+class ChargePoint {
+    id
+    name
+    serialNumber
+    owner: Customer
+}
+
+Customer "1" o-- "*" ChargePoint
+
+class Connector {
+    id
+    chargePoint: ChargePoint
+    number: int
+}
+
+ChargePoint "1" *-- "*" Connector
+
+class RfidTag {
+    id
+    uniqueId
+    owner: Customer
+    vehicle: Vehicle?
+}
+
+Customer "1" o-- "*" RfidTag
+
+class Vehicle {
+    id
+    name
+    registrationPlate
+}
+
+Vehicle "0..1" -- "*" RfidTag
+
+class ChargingSession {
+    id
+    connector: Connector
+    rfidTag: RfidTag
+}
+
+Connector "1" o-- "*" ChargingSession
+RfidTag "1" o-- "*" ChargingSession
+
+class ChargingSessionEvent {
+    session: ChargingSession
+    type: {START, END, ERROR}
+    time
+    meterValue
+    message
+}
+
+ChargingSession "1" *-- "1..*" ChargingSessionEvent
+
+@enduml
