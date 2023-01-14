@@ -35,7 +35,8 @@ ChargePoint "1" *-- "*" Connector
 
 class RfidTag {
     id
-    uniqueId
+    name
+    number
     owner: Customer
     vehicle: Vehicle?
 }
@@ -61,8 +62,8 @@ RfidTag "1" o-- "*" ChargingSession
 
 class ChargingSessionEvent {
     session: ChargingSession
-    type: {START, END, ERROR}
     time
+    type: {START, END, ERROR}
     meterValue
     message
 }

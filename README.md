@@ -65,7 +65,9 @@ TBD
 
 ## Entity model
 
-TBD
+The database entities are shortly described on a [PlantUML diagram](docs/entities.puml):
+
+![](docs/entities.png)
 
 ## Date converter
 
