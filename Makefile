@@ -10,4 +10,4 @@ clean:
 
 .PHONY: run
 run:
-	"$$JAVA_HOME/bin/java" -jar build/libs/codechallenge-*.jar
+	"$$JAVA_HOME/bin/java" -jar build/libs/codechallenge-*[!plain].jar
