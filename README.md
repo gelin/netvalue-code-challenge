@@ -5,7 +5,21 @@ To a senior Spring Boot developer position.
 
 Original requirements are described in [PDF](docs/Spring%20Boot%20Coding%20Challenge.pdf).
 
-This is Spring Boot application with REST API plus some documented ideas.
+This is Spring Boot application with REST API plus some documented ideas and interfaces.
+The app is generated using [Spring Initializr](https://start.spring.io/#!type=gradle-project&language=kotlin&platformVersion=3.0.1&packaging=jar&jvmVersion=17&groupId=nz.netvalue&artifactId=codechallenge&name=codechallenge&description=Senior%20Spring%20Boot%20Coding%20Challenge%20for%20NetValue&packageName=nz.netvalue.codechallenge&dependencies=web,h2,security).
+
+## Build
+
+### Requirements
+
+You need JDK 17 (LTS) to be installed on the build machine. 
+On Ubuntu run `sudo apt install openjdk-17-jdk` to install it.
+
+### Build
+
+Define `JAVA_HOME` environment variable to point to correct installation of JDK 17, for example: `export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64`.
+Run `./gradlew build` (or `gradlew.bat build` on Windows).
+The resulting JAR file appears under the `build/libs` folder.
 
 ## REST API
 
