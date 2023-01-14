@@ -31,7 +31,7 @@ Returns application version and database schema version.
 
 ### Admin endpoints
 
-#### GET /charging-sessions
+#### GET /admin/charging-sessions
 
 Returns the list of charging sessions.
 
@@ -41,7 +41,7 @@ Query params:
 
 Result: list of JSON objects
 
-#### POST /charge-points/${charge point id}/connectors/
+#### POST /admin/charge-points/${charge point id}/connectors/
 
 Adds a new connector to an existing charge point.
 
@@ -51,13 +51,13 @@ Result: JSON object of the new created charge point.
 
 ### Customer endpoints
 
-#### POST /charging-sessions/
+#### POST /customer/charging-sessions/
 
 Starts a charging session.
 
 TBD
 
-#### POST /charging-sessions/${charging session id}/end
+#### POST /customer/charging-sessions/${charging session id}/end
 
 Ends the charging session.
 
