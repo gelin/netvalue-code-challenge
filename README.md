@@ -3,6 +3,8 @@
 This is a code sample for a coding challenge for NetValue Ltd.
 To a senior Spring Boot developer position.
 
+Original requirements are described in [PDF](docs/Spring%20Boot%20Coding%20Challenge.pdf).
+
 This is Spring Boot application with REST API plus some documented ideas.
 
 ## REST API
