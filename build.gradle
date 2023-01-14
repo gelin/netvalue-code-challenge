@@ -18,10 +18,14 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+	implementation 'org.flywaydb:flyway-core'
 
 	runtimeOnly 'com.h2database:h2'
 
@@ -37,8 +41,23 @@ tasks.withType(KotlinCompile).configureEach {
 }
 
 // to inject project version to application.properties
+// https://www.baeldung.com/spring-boot-auto-property-expansion
+import org.apache.tools.ant.filters.ReplaceTokens
 processResources {
-	expand(project.properties)
+	with copySpec {
+		duplicatesStrategy = DuplicatesStrategy.INCLUDE
+		from 'src/main/resources'
+		include '**/application*.yml'
+		include '**/application*.yaml'
+		include '**/application*.properties'
+		project.properties.findAll().each {
+			prop ->
+				if (prop.value != null) {
+					filter(ReplaceTokens, tokens: [ (prop.key): prop.value.toString()])
+					filter(ReplaceTokens, tokens: [ ('project.' + prop.key): prop.value.toString()])
+				}
+		}
+	}
 }
 
 tasks.named('test') {
