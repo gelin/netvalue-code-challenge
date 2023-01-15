@@ -11,4 +11,4 @@ http://localhost:8080/whoami
 
 ### whoami (admin)
 http://localhost:8080/whoami
-Authorization: Basic admin admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA

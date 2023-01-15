@@ -23,6 +23,21 @@ The resulting JAR file appears under the `build/libs` folder.
 
 ## REST API
 
+### Authorization
+
+This version of the app accepts JWT tokens only. But it has no methods to retrieve the token for simplicity.
+
+Use [jwt.io](https://jwt.io/) to generate a token for payload like this:
+```json
+{
+  "sub": "${user name}",
+  "exp": ${token expiration timestamp},
+  "roles": ["${user role}"]
+}
+```
+
+By default, the token uses HS256 sighing algorithm with "jwtsecretjwtsecretjwtsecretjwtsecret" secret.
+
 ### Public endpoints
 
 #### GET /version
