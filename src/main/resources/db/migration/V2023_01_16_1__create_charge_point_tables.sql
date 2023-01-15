@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS charge_point (
+    id VARCHAR PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    serial_number VARCHAR UNIQUE,
+    owner_id VARCHAR REFERENCES "user" (id) ON UPDATE CASCADE ON DELETE SET NULL
+)
+;
+CREATE TABLE IF NOT EXISTS connector (
+    id VARCHAR PRIMARY KEY,
+    charge_point_id VARCHAR NOT NULL REFERENCES charge_point (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    number VARCHAR NOT NULL,
+    UNIQUE (charge_point_id, number)
+)
+;
+CREATE TABLE IF NOT EXISTS vehicle (
+    id VARCHAR PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    registration_plate VARCHAR
+)
+;
+CREATE TABLE IF NOT EXISTS rfid_tag (
+    id VARCHAR PRIMARY KEY,
+    name VARCHAR,
+    number VARCHAR NOT NULL UNIQUE,
+    owner_id VARCHAR REFERENCES "user" (id) ON UPDATE CASCADE ON DELETE SET NULL,
+    vehicle_id VARCHAR REFERENCES vehicle (id) ON UPDATE CASCADE ON DELETE SET NULL
+)
+;
