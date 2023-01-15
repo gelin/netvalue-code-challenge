@@ -5,3 +5,10 @@ http://localhost:8080/
 
 ### version
 http://localhost:8080/version
+
+### whoami (unauthorized)
+http://localhost:8080/whoami
+
+### whoami (admin)
+http://localhost:8080/whoami
+Authorization: Basic admin admin

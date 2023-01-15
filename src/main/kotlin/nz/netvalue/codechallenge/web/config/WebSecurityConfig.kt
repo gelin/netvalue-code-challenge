@@ -21,17 +21,15 @@ class WebSecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests { requests ->
-                requests
-                    .requestMatchers("/", "/version").permitAll()
-                    .anyRequest().authenticated()
-            }
-//            .formLogin { form: FormLoginConfigurer<HttpSecurity?> ->
-//                form
-//                        .loginPage("/login")
-//                        .permitAll()
-//            }
-//            .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
+                .authorizeHttpRequests()
+                .requestMatchers("/", "/version", "/whoami")
+                .permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic()    // TODO: use JWT token auth
         return http.build()
     }
 

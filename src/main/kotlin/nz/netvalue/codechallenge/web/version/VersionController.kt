@@ -3,6 +3,7 @@ package nz.netvalue.codechallenge.web.version
 import nz.netvalue.codechallenge.core.version.VersionModel
 import nz.netvalue.codechallenge.core.version.VersionRepository
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
