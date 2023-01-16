@@ -5,7 +5,7 @@ MERGE INTO charge_point (id, name, serial_number, owner_id)
 VALUES ('test_charge_point', 'Test Charge Point', 'SOME SERIAL', 'test_customer')
 ;
 MERGE INTO connector (id, charge_point_id, number)
-VALUES ('test_conector_1', 'test_charge_point', '1')
+VALUES ('test_connector_1', 'test_charge_point', '1')
 ;
 MERGE INTO vehicle (id, name, registration_plate)
 VALUES ( 'test_vehicle', 'Test Vehicle', 'TEST' )

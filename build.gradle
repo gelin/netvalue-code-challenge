@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'nz.netvalue'
-version = '0.2.0'
+version = '0.3.0'
 sourceCompatibility = '17'
 
 repositories {
@@ -33,6 +33,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito.kotlin:mockito-kotlin:4.1.0'
 }
 
 tasks.withType(KotlinCompile).configureEach {

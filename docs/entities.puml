@@ -61,6 +61,7 @@ Connector "1" o-- "*" ChargingSession
 RfidTag "1" o-- "*" ChargingSession
 
 class ChargingSessionEvent {
+    id
     session: ChargingSession
     time
     type: {START, END, ERROR}

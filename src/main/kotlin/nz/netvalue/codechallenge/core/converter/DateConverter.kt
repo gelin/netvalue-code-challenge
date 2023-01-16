@@ -2,6 +2,7 @@ package nz.netvalue.codechallenge.core.converter
 
 import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.ResolverStyle
@@ -15,8 +16,8 @@ private val logger = Slf4JLoggerFactory.getInstance("nz.netvalue.codechallenge.c
  * If time is not defined the time part is set to 00:00 (midnight).
  * This convertor tries to guess a date using different patterns.
  */
-// TODO: use another algo instead of trying all patterns sequentially?
-fun String.toLocalDateTime() : LocalDateTime? {
+fun String.toLocalDateTime(defaultTime: LocalTime = LocalTime.MIDNIGHT) : LocalDateTime? {
+    // TODO: if time is not defined in the string, replace with default time
     FORMATTERS.forEach { formatter ->
         try {
             val result = LocalDateTime.parse(this.trim(), formatter)

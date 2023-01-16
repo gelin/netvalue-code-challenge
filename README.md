@@ -29,7 +29,7 @@ This version of the app accepts JWT tokens only. But it has no methods to retrie
 It does not use Spring Security because Spring security looks like an over-engineering for the task to parse and verify JWT tokens.
 
 Use [jwt.io](https://jwt.io/) to generate a token for payload like this:
-```json
+```
 {
   "sub": "${user name}",
   "exp": ${token expiration timestamp},
@@ -84,6 +84,12 @@ TBD
 The database entities are shortly described on a [PlantUML diagram](docs/entities.puml):
 
 ![](docs/entities.png)
+
+Charging session needs to persist the time and meter value both for session start and end.
+Also, the session can be terminated by error (with error message).
+So, the session timestamped events are stored into a separated table, there's no explicit session status.
+To prefer inserts to updates.
+To allow to add more event types in future without changing the DB schema.
 
 ## Date converter
 
