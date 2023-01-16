@@ -26,6 +26,7 @@ The resulting JAR file appears under the `build/libs` folder.
 ### Authorization
 
 This version of the app accepts JWT tokens only. But it has no methods to retrieve the token for simplicity.
+It does not use Spring Security because Spring security looks like an over-engineering for the task to parse and verify JWT tokens.
 
 Use [jwt.io](https://jwt.io/) to generate a token for payload like this:
 ```json
@@ -48,7 +49,7 @@ Returns application version and database schema version.
 
 #### GET /admin/charging-sessions
 
-Returns the list of charging sessions.
+Returns the list of all charging sessions.
 
 Query params: 
 * `from` — date to select sessions from (inclusive)
@@ -86,6 +87,9 @@ The database entities are shortly described on a [PlantUML diagram](docs/entitie
 
 ## Date converter
 
-TBD
+A universal date converter is defined as a Kotlin extension function [here](src/main/kotlin/nz/netvalue/codechallenge/core/converter/DateConverter.kt).
+The tests are [here](src/test/kotlin/nz/netvalue/codechallenge/core/converter/DateConverterTest.kt).
 
-
+Because there is no timezone in the parsing string, it's parsed to `java.time.LocalDateTime`.
+Customized `java.time.format.DateTimeFormatter` instances are used to parse datetime in the most lenient way.
+However, different formatters for different field orders (yyyy-MM-dd, or dd.MM.yyyy, etc...) are used and are tried sequentially.
