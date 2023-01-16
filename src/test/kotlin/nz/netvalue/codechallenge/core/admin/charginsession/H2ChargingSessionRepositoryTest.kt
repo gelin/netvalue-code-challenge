@@ -11,6 +11,7 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
 class H2ChargingSessionRepositoryTest {
 
@@ -23,7 +24,7 @@ class H2ChargingSessionRepositoryTest {
 
     @Test
     fun testMapRow() {
-        val now = Instant.now()
+        val now = Instant.now().truncatedTo(ChronoUnit.MILLIS)
 
         val resultSet: ResultSet = mock()
         whenever(resultSet.getString("sessionId")).thenReturn("S1")
@@ -97,7 +98,7 @@ class H2ChargingSessionRepositoryTest {
 
     private fun sqlArrayOf(vararg elements: Instant?): Array {
         val array: Array = mock()
-        whenever(array.getArray()).thenReturn(elements.map { it?.let { Timestamp(it.toEpochMilli()) } })
+        whenever(array.getArray()).thenReturn(elements.map { it?.let { Timestamp(it.toEpochMilli()) } }.toTypedArray())
         return array
     }
 

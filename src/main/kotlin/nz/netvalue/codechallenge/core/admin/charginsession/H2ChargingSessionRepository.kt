@@ -1,10 +1,10 @@
 package nz.netvalue.codechallenge.core.admin.charginsession
 
+import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
+import java.sql.Timestamp
+import java.time.*
 
 /**
  * Selects charging sessions from H2 database.
@@ -48,7 +48,55 @@ class H2ChargingSessionRepository(
     }
 
     internal fun mapRow(rs: ResultSet, rowNum: Int): ChargingSessionModel {
-        TODO("Not yet implemented")
+        val connectorId = rs.getString("connectorId")
+        val tagId = rs.getString("tagId")
+
+        val eventIds = rs.getArray("eventIds").asStringList()
+        val eventTimes = rs.getArray("eventTimes").asInstantList()
+        val eventTypes = rs.getArray("eventTypes").asStringList()
+        val eventMeters = rs.getArray("eventMeters").asIntList()
+        val eventMessages = rs.getArray("eventMessages").asStringList()
+
+        val events = zip(eventIds, eventTimes, eventTypes, eventMeters, eventMessages).map {
+            ChargingSessionEventModel(
+                id = it[0] as String,
+                time = ZonedDateTime.ofInstant(it[1] as Instant, timeZone),
+                type = it[2] as String,
+                meterValue = it[3] as Int?,
+                message = it[4] as String?
+            )
+        }
+
+        return ChargingSessionModel(
+            id = rs.getString("sessionId"),
+            connector = if (connectorId != null) ConnectorModel(
+                id = connectorId,
+                number = rs.getString("connectorNumber"),
+                chargePoint = ChargePointModel(
+                    id = rs.getString("pointId"),
+                    name = rs.getString("pointName"),
+                    serialNumber = rs.getString("pointSerial"),
+                    ownerId = rs.getString("pointOwnerId")
+                )
+            ) else null,
+            rfidTag = if (tagId != null) RfidTagModel(
+                id = tagId,
+                name = rs.getString("tagName"),
+                number = rs.getString("tagNumber"),
+                ownerId = rs.getString("tagOwnerId"),
+                vehicleId = rs.getString("tagVehicleId")
+            ) else null,
+            events = events
+        )
     }
+
+    private fun java.sql.Array?.asStringList(): List<String?> =
+        (this?.array as? Array<*>)?.map { it as? String } ?: listOf()
+
+    private fun java.sql.Array?.asInstantList(): List<Instant?> =
+        (this?.array as? Array<*>)?.map { (it as? Timestamp)?.toInstant() } ?: listOf()
+
+    private fun java.sql.Array?.asIntList(): List<Int?> =
+        (this?.array as? Array<*>)?.map { it as? Int } ?: listOf()
 
 }
