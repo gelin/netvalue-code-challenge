@@ -1,10 +1,11 @@
-package nz.netvalue.codechallenge.core.admin.charginsession
+package nz.netvalue.codechallenge.core.admin.chargingsession
 
 import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.time.*
+import java.time.temporal.TemporalAccessor
 
 /**
  * Selects charging sessions from H2 database.
@@ -18,7 +19,7 @@ class H2ChargingSessionRepository(
 
     override fun listSessions(from: LocalDateTime?, till: LocalDateTime?): List<ChargingSessionModel> {
         val result = jdbc.query("""
-            SELECT 
+            SELECT
                 s.id AS sessionId,
                 c.id AS connectorId,
                 c.number AS connectorNumber,
@@ -31,16 +32,19 @@ class H2ChargingSessionRepository(
                 t.number AS tagNumber,
                 t.owner_id AS tagOwnerId,
                 t.vehicle_id AS tagVehicleId,
+                (SELECT se.time FROM charging_session_event se WHERE se.session_id = s.id AND se.type = 'START') AS startTime,
                 ARRAY_AGG(e.id ORDER BY e.time) AS eventIds,
                 ARRAY_AGG(e.time ORDER BY e.time) AS eventTimes,
                 ARRAY_AGG(e.type ORDER BY e.time) AS eventTypes,
                 ARRAY_AGG(e.meter_value ORDER BY e.time) AS eventMeters,
                 ARRAY_AGG(e.message ORDER BY e.time) AS eventMessages
             FROM charging_session s
-            LEFT JOIN charging_session_event e ON e.session_id = s.id
-            LEFT JOIN connector c ON s.connector_id = c.id
-            LEFT JOIN charge_point p ON c.charge_point_id = p.id
-            LEFT JOIN rfid_tag t ON s.rfid_tag_id = t.id
+                     LEFT JOIN charging_session_event e ON e.session_id = s.id
+                     LEFT JOIN connector c ON s.connector_id = c.id
+                     LEFT JOIN charge_point p ON c.charge_point_id = p.id
+                     LEFT JOIN rfid_tag t ON s.rfid_tag_id = t.id
+            GROUP BY e.session_id
+            ORDER BY startTime
         """.trimIndent()) { rs, rowNum ->
             mapRow(rs, rowNum)
         }
@@ -94,7 +98,7 @@ class H2ChargingSessionRepository(
         (this?.array as? Array<*>)?.map { it as? String } ?: listOf()
 
     private fun java.sql.Array?.asInstantList(): List<Instant?> =
-        (this?.array as? Array<*>)?.map { (it as? Timestamp)?.toInstant() } ?: listOf()
+        (this?.array as? Array<*>)?.map { (it as? TemporalAccessor)?.let { ta -> Instant.from(ta) } } ?: listOf()
 
     private fun java.sql.Array?.asIntList(): List<Int?> =
         (this?.array as? Array<*>)?.map { it as? Int } ?: listOf()

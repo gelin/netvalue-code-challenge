@@ -1,4 +1,4 @@
-package nz.netvalue.codechallenge.core.admin.charginsession
+package nz.netvalue.codechallenge.core.admin.chargingsession
 
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -13,7 +13,7 @@ interface ChargingSessionRepository {
      * @param from optional lower date (inclusive) for selection
      * @param till optional higher date (inclusive) for selection
      */
-    fun listSessions(from: LocalDateTime?, till: LocalDateTime?): List<ChargingSessionModel>
+    fun listSessions(from: LocalDateTime? = null, till: LocalDateTime? = null): List<ChargingSessionModel>
 }
 
 /**

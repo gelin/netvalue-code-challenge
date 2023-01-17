@@ -1,4 +1,4 @@
-package nz.netvalue.codechallenge.core.admin.charginsession
+package nz.netvalue.codechallenge.core.admin.chargingsession
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -98,7 +98,7 @@ class H2ChargingSessionRepositoryTest {
 
     private fun sqlArrayOf(vararg elements: Instant?): Array {
         val array: Array = mock()
-        whenever(array.getArray()).thenReturn(elements.map { it?.let { Timestamp(it.toEpochMilli()) } }.toTypedArray())
+        whenever(array.getArray()).thenReturn(elements)     // H2 provides here [java.time.OffsetDateTime], but our code expects any [java.time.TemporalAccessor]
         return array
     }
 

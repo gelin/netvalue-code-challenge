@@ -2,6 +2,7 @@ package nz.netvalue.codechallenge.web.version
 
 import nz.netvalue.codechallenge.core.version.VersionModel
 import nz.netvalue.codechallenge.core.version.VersionRepository
+import nz.netvalue.codechallenge.web.view.ResponseView
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -10,13 +11,14 @@ import org.springframework.web.bind.annotation.RestController
  * Controller to return known version.
  */
 @RestController
+@RequestMapping("/version")
 class VersionController(
     private val repository: VersionRepository
 ) {
 
-    @GetMapping("/version")
-    fun getVersion(): VersionView {
-        return repository.getVersion().toView()
+    @GetMapping
+    fun getVersion(): ResponseView<VersionView> {
+        return ResponseView(result = repository.getVersion().toView())
     }
 
 }
