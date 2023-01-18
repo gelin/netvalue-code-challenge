@@ -15,14 +15,14 @@ import java.time.ZonedDateTime
 @RestController
 @RequestMapping("/admin/charging-sessions")
 class AdminListChargingSessionsController(
-    private val repository: ChargingSessionRepository   // looks like no need in intermediate service
+    private val service: ChargingSessionService
 ) {
 
     @GetMapping
     @AuthRoleRequired("ADMIN")
     fun listChargingSessions(): ResponseView<List<ChargingSessionView>> {
         // TODO: from, till params
-        val sessions = repository.listSessions()
+        val sessions = service.listSessions()
         return ResponseView(
             result = sessions.map { it.toView() }
         )

@@ -1,6 +1,6 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
-import java.time.LocalDateTime
+import java.time.Instant
 import java.time.ZonedDateTime
 
 /**
@@ -9,11 +9,10 @@ import java.time.ZonedDateTime
 interface ChargingSessionRepository {
     /**
      * Returns found sessions.
-     * Timezone for parameters is defined externally.
-     * @param from optional lower date (inclusive) for selection
-     * @param till optional higher date (inclusive) for selection
+     * @param from optional lower datetime (inclusive) for selection
+     * @param till optional higher datetime (inclusive) for selection
      */
-    fun listSessions(from: LocalDateTime? = null, till: LocalDateTime? = null): List<ChargingSessionModel>
+    fun listSessions(from: Instant? = null, till: Instant? = null): List<ChargingSessionModel>
 }
 
 /**

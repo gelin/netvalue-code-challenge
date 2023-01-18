@@ -3,21 +3,18 @@ package nz.netvalue.codechallenge.core.admin.chargingsession
 import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet
-import java.sql.Timestamp
 import java.time.*
 import java.time.temporal.TemporalAccessor
 
 /**
  * Selects charging sessions from H2 database.
  * @param jdbc connection to database
- * @param timeZone timezone for input from and till dates
  */
 class H2ChargingSessionRepository(
     private val jdbc: JdbcOperations,
-    private val timeZone: ZoneId = ZoneOffset.UTC
 ) : ChargingSessionRepository {
 
-    override fun listSessions(from: LocalDateTime?, till: LocalDateTime?): List<ChargingSessionModel> {
+    override fun listSessions(from: Instant?, till: Instant?): List<ChargingSessionModel> {
         val result = jdbc.query("""
             SELECT
                 s.id AS sessionId,
@@ -56,7 +53,7 @@ class H2ChargingSessionRepository(
         val tagId = rs.getString("tagId")
 
         val eventIds = rs.getArray("eventIds").asStringList()
-        val eventTimes = rs.getArray("eventTimes").asInstantList()
+        val eventTimes = rs.getArray("eventTimes").asZonedDateTimeList()
         val eventTypes = rs.getArray("eventTypes").asStringList()
         val eventMeters = rs.getArray("eventMeters").asIntList()
         val eventMessages = rs.getArray("eventMessages").asStringList()
@@ -64,7 +61,7 @@ class H2ChargingSessionRepository(
         val events = zip(eventIds, eventTimes, eventTypes, eventMeters, eventMessages).map {
             ChargingSessionEventModel(
                 id = it[0] as String,
-                time = ZonedDateTime.ofInstant(it[1] as Instant, timeZone),
+                time = it[1] as ZonedDateTime,
                 type = it[2] as String,
                 meterValue = it[3] as Int?,
                 message = it[4] as String?
@@ -97,8 +94,8 @@ class H2ChargingSessionRepository(
     private fun java.sql.Array?.asStringList(): List<String?> =
         (this?.array as? Array<*>)?.map { it as? String } ?: listOf()
 
-    private fun java.sql.Array?.asInstantList(): List<Instant?> =
-        (this?.array as? Array<*>)?.map { (it as? TemporalAccessor)?.let { ta -> Instant.from(ta) } } ?: listOf()
+    private fun java.sql.Array?.asZonedDateTimeList(): List<ZonedDateTime?> =
+        (this?.array as? Array<*>)?.map { (it as? TemporalAccessor)?.let { ta -> ZonedDateTime.from(ta) } } ?: listOf()
 
     private fun java.sql.Array?.asIntList(): List<Int?> =
         (this?.array as? Array<*>)?.map { it as? Int } ?: listOf()

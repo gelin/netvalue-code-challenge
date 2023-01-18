@@ -9,6 +9,7 @@ import java.sql.Array
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -98,7 +99,8 @@ class H2ChargingSessionRepositoryTest {
 
     private fun sqlArrayOf(vararg elements: Instant?): Array {
         val array: Array = mock()
-        whenever(array.getArray()).thenReturn(elements)     // H2 provides here [java.time.OffsetDateTime], but our code expects any [java.time.TemporalAccessor]
+        whenever(array.getArray()).thenReturn(elements.map { OffsetDateTime.ofInstant(it, ZoneOffset.UTC) }.toTypedArray())
+        // H2 provides here [java.time.OffsetDateTime] (in array), but our code expects any [java.time.TemporalAccessor] which can be converted to [java.time.ZonedDateTime]
         return array
     }
 
