@@ -93,8 +93,8 @@ To allow to add more event types in future without changing the DB schema.
 
 ## Date converter
 
-A universal date converter is defined as a Kotlin extension function [here](src/main/kotlin/nz/netvalue/codechallenge/core/converter/DateConverter.kt).
-The tests are [here](src/test/kotlin/nz/netvalue/codechallenge/core/converter/DateConverterTest.kt).
+A universal date converter is defined as a Kotlin extension function [here](src/main/kotlin/nz/netvalue/codechallenge/web/converter/DateConverter.kt).
+The tests are [here](src/test/kotlin/nz/netvalue/codechallenge/web/converter/DateConverterTest.kt).
 
 Because there is no timezone in the parsing string, it's parsed to `java.time.LocalDateTime`.
 Customized `java.time.format.DateTimeFormatter` instances are used to parse datetime in the most lenient way.

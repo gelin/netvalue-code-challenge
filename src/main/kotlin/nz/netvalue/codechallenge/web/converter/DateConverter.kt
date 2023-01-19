@@ -1,11 +1,9 @@
-package nz.netvalue.codechallenge.core.converter
+package nz.netvalue.codechallenge.web.converter
 
 import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
-import java.time.format.ResolverStyle
 import java.time.temporal.ChronoField
 import java.util.*
 
@@ -13,15 +11,20 @@ private val logger = Slf4JLoggerFactory.getInstance("nz.netvalue.codechallenge.c
 
 /**
  * Converts a date+time (or just date) defined as a string into [LocalDateTime].
- * If time is not defined the time part is set to 00:00 (midnight).
+ * If time is not defined the time part is set to specified [defaultTime] (midnight by default).
  * This convertor tries to guess a date using different patterns.
  */
 fun String.toLocalDateTime(defaultTime: LocalTime = LocalTime.MIDNIGHT) : LocalDateTime? {
     // TODO: if time is not defined in the string, replace with default time
-    FORMATTERS.forEach { formatter ->
+    FORMATTERS.forEach { baseFormatter ->
+        val builder = DateTimeFormatterBuilder().append(baseFormatter)
+        val formatter = TIME_FIELDS
+            .filter { defaultTime.isSupported(it) }
+            .fold(builder) { b, f -> b.parseDefaulting(f, defaultTime.getLong(f)) }
+            .toFormatter(Locale.ROOT)
         try {
             val result = LocalDateTime.parse(this.trim(), formatter)
-            logger.debug("Parsed '{}' with {}", this, formatter)
+            logger.debug("Parsed '{}' to {} with {}", this, result, formatter)
             return result
         } catch (e: Exception) {
             logger.debug("Failed to convert '{}' with {}: {}", this, formatter, e.message)
@@ -47,8 +50,6 @@ private val FORMATTERS = listOf(
         .optionalStart().appendLiteral(':').optionalEnd()
         .appendValue(ChronoField.MINUTE_OF_HOUR)
         .optionalEnd()
-        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
         .parseLenient()
         .toFormatter(Locale.ROOT),
     DateTimeFormatterBuilder()      // semi-universal formatter for month, day, year sequence
@@ -64,8 +65,6 @@ private val FORMATTERS = listOf(
         .optionalStart().appendLiteral(':').optionalEnd()
         .appendValue(ChronoField.MINUTE_OF_HOUR)
         .optionalEnd()
-        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
         .parseLenient()
         .toFormatter(Locale.ROOT),
     DateTimeFormatterBuilder()      // semi-universal formatter for day, month, year sequence
@@ -81,8 +80,15 @@ private val FORMATTERS = listOf(
         .optionalStart().appendLiteral(':').optionalEnd()
         .appendValue(ChronoField.MINUTE_OF_HOUR)
         .optionalEnd()
-        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
         .parseLenient()
         .toFormatter(Locale.ROOT),
+)
+
+private val TIME_FIELDS = listOf(
+    ChronoField.HOUR_OF_DAY,
+    ChronoField.MINUTE_OF_HOUR,
+    ChronoField.SECOND_OF_MINUTE,
+    ChronoField.MILLI_OF_SECOND,
+    ChronoField.MICRO_OF_SECOND,
+    ChronoField.NANO_OF_SECOND
 )
