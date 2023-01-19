@@ -1,5 +1,7 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
+import nz.netvalue.codechallenge.core.model.ChargePointModel
+import nz.netvalue.codechallenge.core.model.ConnectorModel
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.endsWith
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,6 +18,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
+// TODO: add Spring test with H2 in-memory database
 class H2ChargingSessionRepositoryTest {
 
     private lateinit var repository: H2ChargingSessionRepository

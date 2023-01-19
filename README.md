@@ -21,6 +21,12 @@ Define `JAVA_HOME` environment variable to point to correct installation of JDK 
 Run `./gradlew build` (or `gradlew.bat build` on Windows).
 The resulting JAR file appears under the `build/libs` folder.
 
+### Run
+
+Run `java -jar build/libs/codechallenge-*[!plain].jar` (jar file which doesn't ends with `plain.jar`).
+This is executable JAR. It starts HTTP server on port 8080.
+The database is created as `data.*.db` files in the current directory by default.
+
 ## REST API
 
 ### Authorization
@@ -55,15 +61,61 @@ Query params:
 * `from` — date to select sessions from (inclusive)
 * `till` — date to select sessions till (inclusive)
 
-Result: list of JSON objects
+Result: list of JSON objects like this:
+```json
+{
+  "timestamp": "2023-01-19T16:29:01.913270445Z",
+  "status": 200,
+  "result": [
+    {
+      "id": "test_session",
+      "connector": {
+        "id": "test_connector_1",
+        "chargePoint": {
+          "id": "test_charge_point",
+          "name": "Test Charge Point",
+          "serialNumber": "SOME SERIAL",
+          "ownerId": "test_customer"
+        },
+        "number": 1
+      },
+      "rfidTag": {
+        "id": "test_tag",
+        "name": "Test Tag",
+        "number": "NUMBER",
+        "ownerId": "test_customer",
+        "vehicleId": "test_vehicle"
+      },
+      "events": [
+        {
+          "time": "2023-01-16T15:42:00Z",
+          "type": "START",
+          "meterValue": 1234,
+          "message": null
+        },
+        {
+          "time": "2023-01-16T16:02:00Z",
+          "type": "END",
+          "meterValue": 2345,
+          "message": null
+        }
+      ]
+    }
+  ]
+}
+```
 
 #### POST /admin/charge-points/${charge point id}/connectors/
 
-Adds a new connector to an existing charge point.
+Adds a new connector to the existing charge point.
+The next number for the new connector is automatically assigned.
 
 Body: empty
 
-Result: JSON object of the new created charge point.
+Result: JSON object of the new created charge point connector.
+For example:
+```json
+```
 
 ### Customer endpoints
 

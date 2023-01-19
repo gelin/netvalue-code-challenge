@@ -1,6 +1,8 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
 import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
+import nz.netvalue.codechallenge.core.model.ChargePointModel
+import nz.netvalue.codechallenge.core.model.ConnectorModel
 import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet

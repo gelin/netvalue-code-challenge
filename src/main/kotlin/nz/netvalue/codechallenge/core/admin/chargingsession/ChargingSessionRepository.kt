@@ -1,5 +1,6 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
+import nz.netvalue.codechallenge.core.model.ConnectorModel
 import java.time.Instant
 import java.time.ZonedDateTime
 
@@ -25,26 +26,6 @@ data class ChargingSessionModel(
     val connector: ConnectorModel?,
     val rfidTag: RfidTagModel?,
     val events: List<ChargingSessionEventModel>
-)
-
-/**
- * Charge point connector model.
- * Contains charge point object.
- */
-data class ConnectorModel(
-    val id: String,
-    val chargePoint: ChargePointModel,
-    val number: String
-)
-
-/**
- * Charge point model.
- */
-data class ChargePointModel(
-    val id: String,
-    val name: String,
-    val serialNumber: String?,
-    val ownerId: String?
 )
 
 /**
