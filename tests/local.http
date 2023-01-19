@@ -19,3 +19,15 @@ GET http://localhost:8080/admin/charging-sessions
 ### GET /admin/charging-sessions (admin)
 GET http://localhost:8080/admin/charging-sessions
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### GET /admin/charging-sessions (admin, from)
+GET http://localhost:8080/admin/charging-sessions?from=2023-01-17
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### GET /admin/charging-sessions (admin, till)
+GET http://localhost:8080/admin/charging-sessions?till=2023-01-16
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### GET /admin/charging-sessions (admin, from-till)
+GET http://localhost:8080/admin/charging-sessions?from=2023-01-16&till=2023-01-16
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA

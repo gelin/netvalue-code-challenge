@@ -2,11 +2,14 @@ package nz.netvalue.codechallenge.web.admin.chargingsession
 
 import nz.netvalue.codechallenge.core.admin.chargingsession.*
 import nz.netvalue.codechallenge.core.admin.chargingsession.ConnectorModel
+import nz.netvalue.codechallenge.web.converter.toLocalDateTime
 import nz.netvalue.codechallenge.web.security.AuthRoleRequired
 import nz.netvalue.codechallenge.web.view.ResponseView
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalTime
 import java.time.ZonedDateTime
 
 /**
@@ -18,11 +21,21 @@ class AdminListChargingSessionsController(
     private val service: ChargingSessionService
 ) {
 
+    /**
+     * Returns list of all charging sessions.
+     * @param from from date, parsed with [toLocalDateTime]
+     * @param till till date, parsed with [toLocalDateTime]
+     */
     @GetMapping
     @AuthRoleRequired("ADMIN")
-    fun listChargingSessions(): ResponseView<List<ChargingSessionView>> {
-        // TODO: from, till params
-        val sessions = service.listSessions()
+    fun listChargingSessions(
+        @RequestParam(required = false) from: String?,
+        @RequestParam(required = false) till: String?
+    ): ResponseView<List<ChargingSessionView>> {
+        val sessions = service.listSessions(
+            from = from?.toLocalDateTime(defaultTime = LocalTime.MIDNIGHT),
+            till = till?.toLocalDateTime(defaultTime = LocalTime.MIDNIGHT.minusNanos(1))
+        )
         return ResponseView(
             result = sessions.map { it.toView() }
         )

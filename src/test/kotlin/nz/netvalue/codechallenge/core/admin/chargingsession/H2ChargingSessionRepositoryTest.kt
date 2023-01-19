@@ -1,5 +1,7 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.endsWith
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -21,6 +23,38 @@ class H2ChargingSessionRepositoryTest {
     @BeforeEach
     fun setUp() {
         repository = H2ChargingSessionRepository(mock())
+    }
+
+    @Test
+    fun testBuildQuery_noParams() {
+        val (sql, params) = repository.buildQuery(null, null)
+        assertThat(sql, endsWith("GROUP BY e.session_id ORDER BY startTime;"))
+        assertEquals(listOf<Any>(), params)
+    }
+
+    @Test
+    fun testBuildQuery_fromParam() {
+        val time = Instant.now()
+        val (sql, params) = repository.buildQuery(time, null)
+        assertThat(sql, endsWith("GROUP BY e.session_id HAVING maxTime >= ? ORDER BY startTime;"))
+        assertEquals(listOf(time), params)
+    }
+
+    @Test
+    fun testBuildQuery_tillParam() {
+        val time = Instant.now()
+        val (sql, params) = repository.buildQuery(null, time)
+        assertThat(sql, endsWith("GROUP BY e.session_id HAVING minTime <= ? ORDER BY startTime;"))
+        assertEquals(listOf(time), params)
+    }
+
+    @Test
+    fun testBuildQuery_twoParams() {
+        val timeFrom = Instant.now().minusSeconds(100)
+        val timeTill = Instant.now()
+        val (sql, params) = repository.buildQuery(timeFrom, timeTill)
+        assertThat(sql, endsWith("GROUP BY e.session_id HAVING maxTime >= ? AND minTime <= ? ORDER BY startTime;"))
+        assertEquals(listOf(timeFrom, timeTill), params)
     }
 
     @Test

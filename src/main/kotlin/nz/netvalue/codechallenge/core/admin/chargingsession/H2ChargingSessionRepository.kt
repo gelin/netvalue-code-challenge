@@ -1,5 +1,6 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
+import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
 import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet
@@ -13,9 +14,19 @@ import java.time.temporal.TemporalAccessor
 class H2ChargingSessionRepository(
     private val jdbc: JdbcOperations,
 ) : ChargingSessionRepository {
+    private val logger = Slf4JLoggerFactory.getInstance(this::class.java)
 
     override fun listSessions(from: Instant?, till: Instant?): List<ChargingSessionModel> {
-        val result = jdbc.query("""
+        val (sql, params) = buildQuery(from, till)
+        logger.debug("Listing sessions with sql:\n{}\nparams: {}", sql, params)
+        val result = jdbc.query(sql, { rs, rowNum ->
+                mapRow(rs, rowNum)
+            }, *params.toTypedArray())
+        return result
+    }
+
+    internal fun buildQuery(from: Instant?, till: Instant?): Pair<String, List<Any>> {
+        val sqlBuilder = StringBuilder("""
             SELECT
                 s.id AS sessionId,
                 c.id AS connectorId,
@@ -30,6 +41,8 @@ class H2ChargingSessionRepository(
                 t.owner_id AS tagOwnerId,
                 t.vehicle_id AS tagVehicleId,
                 (SELECT se.time FROM charging_session_event se WHERE se.session_id = s.id AND se.type = 'START') AS startTime,
+                MIN(e.time) AS minTime,
+                MAX(e.time) AS maxTime,
                 ARRAY_AGG(e.id ORDER BY e.time) AS eventIds,
                 ARRAY_AGG(e.time ORDER BY e.time) AS eventTimes,
                 ARRAY_AGG(e.type ORDER BY e.time) AS eventTypes,
@@ -41,11 +54,27 @@ class H2ChargingSessionRepository(
                      LEFT JOIN charge_point p ON c.charge_point_id = p.id
                      LEFT JOIN rfid_tag t ON s.rfid_tag_id = t.id
             GROUP BY e.session_id
-            ORDER BY startTime
-        """.trimIndent()) { rs, rowNum ->
-            mapRow(rs, rowNum)
+        """.trimIndent())
+
+        val havingClauses = mutableListOf<String>()
+        val params = mutableListOf<Any>()
+
+        if (from != null) {
+            havingClauses.add("maxTime >= ?")
+            params.add(from)
         }
-        return result
+        if (till != null) {
+            havingClauses.add("minTime <= ?")
+            params.add(till)
+        }
+
+        if (havingClauses.isNotEmpty()) {
+            havingClauses.joinTo(sqlBuilder, prefix = " HAVING ", separator = " AND ")
+        }
+
+        sqlBuilder.append(" ORDER BY startTime;")
+
+        return sqlBuilder.toString() to params
     }
 
     internal fun mapRow(rs: ResultSet, rowNum: Int): ChargingSessionModel {
