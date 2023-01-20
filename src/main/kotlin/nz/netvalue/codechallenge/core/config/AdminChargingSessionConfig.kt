@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcOperations
 import java.time.ZoneId
 
 /**
- * Configuration for Admin Charging Point component.
+ * Configuration for Admin Charging Session component.
  */
 @Configuration
 class AdminChargingSessionConfig {

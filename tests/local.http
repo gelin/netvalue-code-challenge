@@ -31,3 +31,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsI
 ### GET /admin/charging-sessions (admin, from-till)
 GET http://localhost:8080/admin/charging-sessions?from=2023-01-16&till=2023-01-16
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### POST /admin/charge-points/${charge point id}/connectors (admin, invalid id)
+POST http://localhost:8080/admin/charge-points/INVALID/connectors
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### POST /admin/charge-points/${charge point id}/connectors (admin)
+POST http://localhost:8080/admin/charge-points/test_charge_point/connectors
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
