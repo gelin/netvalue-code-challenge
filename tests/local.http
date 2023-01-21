@@ -1,5 +1,7 @@
 # a set of test to REST API run locally
 
+// TODO: automate most of these tests with Spring tests with H2 in-memory
+
 ### root
 http://localhost:8080/
 

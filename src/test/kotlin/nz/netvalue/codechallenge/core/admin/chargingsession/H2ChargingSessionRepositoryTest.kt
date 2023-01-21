@@ -1,7 +1,7 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
-import nz.netvalue.codechallenge.core.model.ChargePointModel
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.ChargePointModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.endsWith
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -11,21 +11,19 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.sql.Array
 import java.sql.ResultSet
-import java.sql.Timestamp
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 // TODO: add Spring test with H2 in-memory database
 class H2ChargingSessionRepositoryTest {
 
-    private lateinit var repository: H2ChargingSessionRepository
+    private lateinit var repository: H2ListChargingSessionsRepository
 
     @BeforeEach
     fun setUp() {
-        repository = H2ChargingSessionRepository(mock())
+        repository = H2ListChargingSessionsRepository(mock())
     }
 
     @Test
@@ -112,14 +110,14 @@ class H2ChargingSessionRepositoryTest {
             events = listOf(
                 ChargingSessionEventModel(
                     id = "E1",
-                    time = ZonedDateTime.ofInstant(now.minusSeconds(600), ZoneOffset.UTC),
+                    time = now.minusSeconds(600),
                     type = "START",
                     meterValue = 123,
                     message = "Message"
                 ),
                 ChargingSessionEventModel(
                     id = "E2",
-                    time = ZonedDateTime.ofInstant(now, ZoneOffset.UTC),
+                    time = now,
                     type = "END",
                     meterValue = 456,
                     message = null
@@ -137,7 +135,7 @@ class H2ChargingSessionRepositoryTest {
     private fun sqlArrayOf(vararg elements: Instant?): Array {
         val array: Array = mock()
         whenever(array.getArray()).thenReturn(elements.map { OffsetDateTime.ofInstant(it, ZoneOffset.UTC) }.toTypedArray())
-        // H2 provides here [java.time.OffsetDateTime] (in array), but our code expects any [java.time.TemporalAccessor] which can be converted to [java.time.ZonedDateTime]
+        // H2 provides here [java.time.OffsetDateTime] (in array), but our code expects any [java.time.TemporalAccessor] which can be converted to [java.time.Instant]
         return array
     }
 

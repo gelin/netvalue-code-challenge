@@ -1,6 +1,6 @@
 package nz.netvalue.codechallenge.core.admin.chargepoint
 
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 

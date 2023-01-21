@@ -1,8 +1,11 @@
 package nz.netvalue.codechallenge.core.admin.chargepoint
 
-import nz.netvalue.codechallenge.core.model.ChargePointModel
-import nz.netvalue.codechallenge.core.model.ConnectorModel
-import org.junit.jupiter.api.Assertions.*
+import nz.netvalue.codechallenge.core.chargepoint.ChargePointModel
+import nz.netvalue.codechallenge.core.chargepoint.ChargePointWithConnectorsModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.GetChargePointRepository
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any

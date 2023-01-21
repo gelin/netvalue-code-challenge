@@ -1,7 +1,5 @@
 package nz.netvalue.codechallenge.core.admin.chargepoint
 
-import nz.netvalue.codechallenge.core.model.ChargePointModel
-
 /**
  * Creates new Connector for the Charge Point.
  */

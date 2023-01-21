@@ -9,10 +9,10 @@ import java.time.ZoneOffset
  * @param repository repository to retrieve data from
  * @param timezone timezone for input from and till dates
  */
-class SimpleChargingSessionService(
-    private val repository: ChargingSessionRepository,
+class SimpleListChargingSessionsService(
+    private val repository: ListChargingSessionsRepository,
     private val timezone: ZoneId = ZoneOffset.UTC
-) : ChargingSessionService {
+) : ListChargingSessionsService {
     override fun listSessions(from: LocalDateTime?, till: LocalDateTime?): List<ChargingSessionModel> {
         return repository.listSessions(
             from?.atZone(timezone)?.toInstant(),

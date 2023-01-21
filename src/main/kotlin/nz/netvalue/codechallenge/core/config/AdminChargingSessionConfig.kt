@@ -1,9 +1,9 @@
 package nz.netvalue.codechallenge.core.config
 
-import nz.netvalue.codechallenge.core.admin.chargingsession.ChargingSessionRepository
-import nz.netvalue.codechallenge.core.admin.chargingsession.ChargingSessionService
-import nz.netvalue.codechallenge.core.admin.chargingsession.H2ChargingSessionRepository
-import nz.netvalue.codechallenge.core.admin.chargingsession.SimpleChargingSessionService
+import nz.netvalue.codechallenge.core.admin.chargingsession.H2ListChargingSessionsRepository
+import nz.netvalue.codechallenge.core.admin.chargingsession.ListChargingSessionsRepository
+import nz.netvalue.codechallenge.core.admin.chargingsession.ListChargingSessionsService
+import nz.netvalue.codechallenge.core.admin.chargingsession.SimpleListChargingSessionsService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,16 +19,16 @@ class AdminChargingSessionConfig {
     @Bean
     fun chargingSessionRepository(
         jdbc: JdbcOperations
-    ): ChargingSessionRepository {
-        return H2ChargingSessionRepository(jdbc = jdbc)
+    ): ListChargingSessionsRepository {
+        return H2ListChargingSessionsRepository(jdbc = jdbc)
     }
 
     @Bean
     fun chargingSessionService(
-        repository: ChargingSessionRepository,
+        repository: ListChargingSessionsRepository,
         @Value("\${system.timezone:UTC}") timezone: ZoneId
-    ): ChargingSessionService {
-        return SimpleChargingSessionService(repository, timezone)
+    ): ListChargingSessionsService {
+        return SimpleListChargingSessionsService(repository, timezone)
     }
 
 }

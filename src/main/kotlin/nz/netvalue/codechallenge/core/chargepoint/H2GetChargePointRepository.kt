@@ -1,7 +1,6 @@
-package nz.netvalue.codechallenge.core.admin.chargepoint
+package nz.netvalue.codechallenge.core.chargepoint
 
 import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
-import nz.netvalue.codechallenge.core.model.ConnectorModel
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.jdbc.core.ResultSetExtractor
 import java.sql.ResultSet

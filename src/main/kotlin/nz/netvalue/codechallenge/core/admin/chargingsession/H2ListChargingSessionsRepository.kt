@@ -1,21 +1,22 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
 import io.micrometer.common.util.internal.logging.Slf4JLoggerFactory
-import nz.netvalue.codechallenge.core.model.ChargePointModel
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.ChargePointModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
 import nz.netvalue.codechallenge.core.util.zip
 import org.springframework.jdbc.core.JdbcOperations
 import java.sql.ResultSet
-import java.time.*
+import java.time.Instant
+import java.time.ZonedDateTime
 import java.time.temporal.TemporalAccessor
 
 /**
  * Selects charging sessions from H2 database.
  * @param jdbc connection to database
  */
-class H2ChargingSessionRepository(
+class H2ListChargingSessionsRepository(
     private val jdbc: JdbcOperations,
-) : ChargingSessionRepository {
+) : ListChargingSessionsRepository {
     private val logger = Slf4JLoggerFactory.getInstance(this::class.java)
 
     override fun listSessions(from: Instant?, till: Instant?): List<ChargingSessionModel> {
@@ -92,7 +93,7 @@ class H2ChargingSessionRepository(
         val events = zip(eventIds, eventTimes, eventTypes, eventMeters, eventMessages).map {
             ChargingSessionEventModel(
                 id = it[0] as String,
-                time = it[1] as ZonedDateTime,
+                time = Instant.from(it[1] as TemporalAccessor),
                 type = it[2] as String,
                 meterValue = it[3] as Int?,
                 message = it[4] as String?

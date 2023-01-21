@@ -47,11 +47,15 @@ By default, the token uses HS256 sighing algorithm with "jwtsecretjwtsecretjwtse
 
 ### Public endpoints
 
+No authentication is required here.
+
 #### GET /version
 
 Returns application version and database schema version.
 
 ### Admin endpoints
+
+These endpoints are available only for tokens with role `ADMIN`.
 
 #### GET /admin/charging-sessions
 
@@ -115,15 +119,46 @@ Body: empty
 Result: JSON object of the new created charge point connector.
 For example:
 ```json
+{
+  "timestamp": "2023-01-20T16:56:58.523448700Z",
+  "status": 200,
+  "result": {
+    "id": "474e00d8-5f14-4c36-9409-29525d364f3f",
+    "chargePoint": {
+      "id": "test_charge_point",
+      "name": "Test Charge Point",
+      "serialNumber": "SOME SERIAL",
+      "ownerId": "test_customer"
+    },
+    "number": 3
+  }
+}
 ```
 
 ### Customer endpoints
 
+These endpoints are available only for tokens with role `CUSTOMER`.
+
 #### POST /customer/charging-sessions/
 
-Starts a charging session.
+Starts a new charging session.
+The API assumes the connector and RFID tag ids are mostly internal information for the system,
+while charge point id and connector and RFID tag numbers are well-known,
+so it's easier to use them to start session.
 
-TBD
+Body:
+```
+{
+  "chargePointId": "${id of the charge point}",
+  "connectorNumber": ${number of the connector on the charge point},
+  "rfidTagNumber": "${unique number of RFID tag}"
+}
+```
+
+Result: JSON object with the new created session details.
+For example:
+```json
+```
 
 #### POST /customer/charging-sessions/${charging session id}/end
 

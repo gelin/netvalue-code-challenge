@@ -1,6 +1,4 @@
-package nz.netvalue.codechallenge.core.admin.chargepoint
-
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+package nz.netvalue.codechallenge.core.chargepoint
 
 /**
  * Retrieves Charge Point from DB.
@@ -22,3 +20,12 @@ data class ChargePointWithConnectorsModel(
     val ownerId: String? = null,
     val connectors: List<ConnectorModel> = listOf()
 )
+
+fun ChargePointWithConnectorsModel.toChargePointModel(): ChargePointModel {
+    return ChargePointModel(
+        id = this.id,
+        name = this.name,
+        serialNumber = this.serialNumber,
+        ownerId = this.ownerId
+    )
+}

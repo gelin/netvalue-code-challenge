@@ -1,4 +1,4 @@
-package nz.netvalue.codechallenge.core.model
+package nz.netvalue.codechallenge.core.chargepoint
 
 /**
  * Charge point model.

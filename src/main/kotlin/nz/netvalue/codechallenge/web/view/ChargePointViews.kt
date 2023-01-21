@@ -1,7 +1,7 @@
 package nz.netvalue.codechallenge.web.view
 
-import nz.netvalue.codechallenge.core.model.ChargePointModel
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.ChargePointModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
 
 /**
  * View for charge point.

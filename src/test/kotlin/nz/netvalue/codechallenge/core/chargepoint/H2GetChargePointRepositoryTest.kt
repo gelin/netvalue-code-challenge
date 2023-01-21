@@ -1,6 +1,5 @@
-package nz.netvalue.codechallenge.core.admin.chargepoint
+package nz.netvalue.codechallenge.core.chargepoint
 
-import nz.netvalue.codechallenge.core.model.ConnectorModel
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

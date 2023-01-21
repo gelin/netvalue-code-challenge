@@ -1,13 +1,12 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
-import nz.netvalue.codechallenge.core.model.ConnectorModel
+import nz.netvalue.codechallenge.core.chargepoint.ConnectorModel
 import java.time.Instant
-import java.time.ZonedDateTime
 
 /**
  * Repository to list all charging sessions for admin.
  */
-interface ChargingSessionRepository {
+interface ListChargingSessionsRepository {
     /**
      * Returns found sessions.
      * @param from optional lower datetime (inclusive) for selection
@@ -23,9 +22,9 @@ interface ChargingSessionRepository {
  */
 data class ChargingSessionModel(
     val id: String,
-    val connector: ConnectorModel?,
-    val rfidTag: RfidTagModel?,
-    val events: List<ChargingSessionEventModel>
+    val connector: ConnectorModel? = null,
+    val rfidTag: RfidTagModel? = null,
+    val events: List<ChargingSessionEventModel> = listOf()
 )
 
 /**
@@ -33,10 +32,10 @@ data class ChargingSessionModel(
  */
 data class RfidTagModel(
     val id: String,
-    val name: String?,
+    val name: String? = null,
     val number: String,
-    val ownerId: String?,
-    val vehicleId: String?
+    val ownerId: String? = null,
+    val vehicleId: String? = null
 )
 
 /**
@@ -44,8 +43,8 @@ data class RfidTagModel(
  */
 data class ChargingSessionEventModel(
     val id: String,
-    val time: ZonedDateTime,
+    val time: Instant,
     val type: String,
-    val meterValue: Int?,
-    val message: String?
+    val meterValue: Int? = null,
+    val message: String? = null
 )

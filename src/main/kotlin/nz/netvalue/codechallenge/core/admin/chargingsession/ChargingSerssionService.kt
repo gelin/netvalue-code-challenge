@@ -1,12 +1,11 @@
 package nz.netvalue.codechallenge.core.admin.chargingsession
 
-import java.time.Instant
 import java.time.LocalDateTime
 
 /**
- * Mediator to [ChargingSessionRepository].
+ * Mediator to [ListChargingSessionsRepository].
  */
-interface ChargingSessionService {
+interface ListChargingSessionsService {
     /**
      * Returns found sessions.
      * @param from optional lower datetime (inclusive) for selection

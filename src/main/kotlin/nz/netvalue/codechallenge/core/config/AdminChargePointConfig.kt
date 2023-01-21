@@ -3,9 +3,9 @@ package nz.netvalue.codechallenge.core.config
 import nz.netvalue.codechallenge.core.admin.chargepoint.AutoAssigningNumberCreateChargePointConnectorService
 import nz.netvalue.codechallenge.core.admin.chargepoint.CreateChargePointConnectorService
 import nz.netvalue.codechallenge.core.admin.chargepoint.CreateConnectorRepository
-import nz.netvalue.codechallenge.core.admin.chargepoint.GetChargePointRepository
 import nz.netvalue.codechallenge.core.admin.chargepoint.H2CreateConnectorRepository
-import nz.netvalue.codechallenge.core.admin.chargepoint.H2GetChargePointRepository
+import nz.netvalue.codechallenge.core.chargepoint.GetChargePointRepository
+import nz.netvalue.codechallenge.core.chargepoint.H2GetChargePointRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcOperations
