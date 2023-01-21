@@ -22,8 +22,8 @@ class H2ListChargingSessionsRepository(
     override fun listSessions(from: Instant?, till: Instant?): List<ChargingSessionModel> {
         val (sql, params) = buildQuery(from, till)
         logger.debug("Listing sessions with sql:\n{}\nparams: {}", sql, params)
-        val result = jdbc.query(sql, { rs, rowNum ->
-                mapRow(rs, rowNum)
+        val result = jdbc.query(sql, { rs, _ ->
+                mapRow(rs)
             }, *params.toTypedArray())
         return result
     }
@@ -80,7 +80,7 @@ class H2ListChargingSessionsRepository(
         return sqlBuilder.toString() to params
     }
 
-    internal fun mapRow(rs: ResultSet, rowNum: Int): ChargingSessionModel {
+    internal fun mapRow(rs: ResultSet): ChargingSessionModel {
         val connectorId = rs.getString("connectorId")
         val tagId = rs.getString("tagId")
 
@@ -90,14 +90,18 @@ class H2ListChargingSessionsRepository(
         val eventMeters = rs.getArray("eventMeters").asIntList()
         val eventMessages = rs.getArray("eventMessages").asStringList()
 
-        val events = zip(eventIds, eventTimes, eventTypes, eventMeters, eventMessages).map {
-            ChargingSessionEventModel(
-                id = it[0] as String,
-                time = Instant.from(it[1] as TemporalAccessor),
-                type = it[2] as String,
-                meterValue = it[3] as Int?,
-                message = it[4] as String?
-            )
+        val events = zip(eventIds, eventTimes, eventTypes, eventMeters, eventMessages).mapNotNull {
+            if (it[0] != null && it[1] != null && it[2] != null) {
+                ChargingSessionEventModel(
+                    id = it[0] as String,
+                    time = Instant.from(it[1] as TemporalAccessor),
+                    type = it[2] as String,
+                    meterValue = it[3] as Int?,
+                    message = it[4] as String?
+                )
+            } else {
+                null
+            }
         }
 
         return ChargingSessionModel(

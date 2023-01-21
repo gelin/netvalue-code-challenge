@@ -17,7 +17,7 @@ import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
 // TODO: add Spring test with H2 in-memory database
-class H2ChargingSessionRepositoryTest {
+class H2ListChargingSessionRepositoryTest {
 
     private lateinit var repository: H2ListChargingSessionsRepository
 
@@ -86,7 +86,7 @@ class H2ChargingSessionRepositoryTest {
         val eventMessages = sqlArrayOf("Message", null)
         whenever(resultSet.getArray("eventMessages")).thenReturn(eventMessages)
 
-        val session = repository.mapRow(resultSet, 1)
+        val session = repository.mapRow(resultSet)
 
         assertEquals(ChargingSessionModel(
             id = "S1",
@@ -126,6 +126,29 @@ class H2ChargingSessionRepositoryTest {
         ), session)
     }
 
+    @Test
+    fun testMapRow_emptySession() {
+        val resultSet: ResultSet = mock()
+        whenever(resultSet.getString("sessionId")).thenReturn("S1")
+        val eventIds = sqlArrayOfNulls(1)
+        whenever(resultSet.getArray("eventIds")).thenReturn(eventIds)
+        val eventTimes = sqlArrayOfNulls(1)
+        whenever(resultSet.getArray("eventTimes")).thenReturn(eventTimes)
+        val eventTypes = sqlArrayOfNulls(1)
+        whenever(resultSet.getArray("eventTypes")).thenReturn(eventTypes)
+        val eventMeters = sqlArrayOfNulls(1)
+        whenever(resultSet.getArray("eventMeters")).thenReturn(eventMeters)
+        val eventMessages = sqlArrayOfNulls(1)
+        whenever(resultSet.getArray("eventMessages")).thenReturn(eventMessages)
+
+        val session = repository.mapRow(resultSet)
+
+        assertEquals(ChargingSessionModel(
+            id = "S1",
+            events = listOf()
+        ), session)
+    }
+
     private fun sqlArrayOf(vararg elements: String?): Array {
         val array: Array = mock()
         whenever(array.getArray()).thenReturn(elements)
@@ -142,6 +165,13 @@ class H2ChargingSessionRepositoryTest {
     private fun sqlArrayOf(vararg elements: Int?): Array {
         val array: Array = mock()
         whenever(array.getArray()).thenReturn(elements)
+        return array
+    }
+
+    private fun sqlArrayOfNulls(size: Int): Array {
+        val array: Array = mock()
+        val nulls: kotlin.Array<Any?> = arrayOfNulls(size)
+        whenever(array.getArray()).thenReturn(nulls)
         return array
     }
 

@@ -159,6 +159,38 @@ Body:
 Result: JSON object with the new created session details.
 For example:
 ```json
+{
+  "timestamp": "2023-01-21T16:00:33.936789366Z",
+  "status": 200,
+  "result": {
+    "id": "bd168e05-0b6b-4bb5-ab66-fc7863e8555f",
+    "connector": {
+      "id": "test_connector_1",
+      "chargePoint": {
+        "id": "test_charge_point",
+        "name": "Test Charge Point",
+        "serialNumber": "SOME SERIAL",
+        "ownerId": "test_customer"
+      },
+      "number": 1
+    },
+    "rfidTag": {
+      "id": "test_tag",
+      "name": "Test Tag",
+      "number": "NUMBER",
+      "ownerId": "test_customer",
+      "vehicleId": "test_vehicle"
+    },
+    "events": [
+      {
+        "time": "2023-01-21T16:00:33.928431441Z",
+        "type": "START",
+        "meterValue": 123,
+        "message": null
+      }
+    ]
+  }
+}
 ```
 
 #### POST /customer/charging-sessions/${charging session id}/end

@@ -21,7 +21,7 @@ class CustomerCreateChargingSessionController(
      * @param form form
      */
     // TODO: if another rules of the session creation are required, the API may be changed
-    @PostMapping()
+    @PostMapping
     @AuthRoleRequired("CUSTOMER")
     fun createSession(
         @RequestBody form: CreateChargingSessionForm
