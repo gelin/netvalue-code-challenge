@@ -13,11 +13,17 @@ interface CreateChargingSessionService {
      * @param chargePointId id of the Charging Point
      * @param connectorNumber number of the connector
      * @param rfidTagNumber unique number of the RFID tag
+     * @param meterValue watts meter value at the session start
      * @return created session
      * @throws NoSuchEntityException if provided ids and numbers are invalid
      */
     // TODO: use DTO for parameters?
-    fun createNewSession(chargePointId: String, connectorNumber: String, rfidTagNumber: String): ChargingSessionModel
+    fun createNewSession(
+        chargePointId: String,
+        connectorNumber: String,
+        rfidTagNumber: String,
+        meterValue: Int,
+    ): ChargingSessionModel
 }
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Charge point or RFID tag not found")

@@ -151,7 +151,8 @@ Body:
 {
   "chargePointId": "${id of the charge point}",
   "connectorNumber": ${number of the connector on the charge point},
-  "rfidTagNumber": "${unique number of RFID tag}"
+  "rfidTagNumber": "${unique number of RFID tag}",
+  "meterValue": ${watts on the meter on the session start}
 }
 ```
 

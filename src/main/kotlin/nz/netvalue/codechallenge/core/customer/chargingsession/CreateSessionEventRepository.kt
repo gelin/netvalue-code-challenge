@@ -15,6 +15,11 @@ interface CreateSessionEventRepository {
      * @param message optional event message
      * @return id of the created Event
      */
-    fun createSessionEvent(sessionId: String, time: Instant, type: String, meterValue: Int? = null, message: String? = null): String
-
+    fun createSessionEvent(
+        sessionId: String,
+        time: Instant,
+        type: String,
+        meterValue: Int? = null,
+        message: String? = null
+    ): String
 }

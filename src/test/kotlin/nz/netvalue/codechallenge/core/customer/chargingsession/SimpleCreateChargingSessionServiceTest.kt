@@ -77,7 +77,7 @@ class SimpleCreateChargingSessionServiceTest {
         whenever(chargePointRepository.getChargePointWithConnectors(any())).thenReturn(null)
 
         try {
-            service.createNewSession("POINT_X", "1", "TAG_NUMBER")
+            service.createNewSession("POINT_X", "1", "TAG_NUMBER", 123)
             fail()
         } catch (e: NoSuchEntityException) {
             // pass
@@ -93,7 +93,7 @@ class SimpleCreateChargingSessionServiceTest {
     @Test
     fun testCreateNewSession_noSuchConnector() {
         try {
-            service.createNewSession("POINT_1", "3", "TAG_NUMBER")
+            service.createNewSession("POINT_1", "3", "TAG_NUMBER", 123)
             fail()
         } catch (e: NoSuchEntityException) {
             // pass
@@ -111,7 +111,7 @@ class SimpleCreateChargingSessionServiceTest {
         whenever(rfidTagRepository.getRfidTagByNumber(any())).thenReturn(null)
 
         try {
-            service.createNewSession("POINT_1", "1", "TAG_X")
+            service.createNewSession("POINT_1", "1", "TAG_X", 123)
             fail()
         } catch (e: NoSuchEntityException) {
             // pass
@@ -128,7 +128,7 @@ class SimpleCreateChargingSessionServiceTest {
     fun testCreateNewSession_shouldCreateSessionAndEvent() {
         val now = Instant.now()
 
-        val session = service.createNewSession("POINT_1", "1", "TAG_NUMBER")
+        val session = service.createNewSession("POINT_1", "1", "TAG_NUMBER", 123)
 
         verify(chargePointRepository).getChargePointWithConnectors(eq("POINT_1"))
         verify(rfidTagRepository).getRfidTagByNumber(eq("TAG_NUMBER"))
@@ -154,13 +154,14 @@ class SimpleCreateChargingSessionServiceTest {
                 number = "TAG_NUMBER",
                 name = "Tag",
                 ownerId = "OWNER_2",
-                vehicleId = "VEHICLE_1"
+                vehicleId = "VEHICLE_1",
             ),
             events = listOf(
                 ChargingSessionEventModel(
                     id = "EVENT_1",
                     time = session.events[0].time,
-                    type = "START"
+                    type = "START",
+                    meterValue = 123,
                 )
             )
         ), session)

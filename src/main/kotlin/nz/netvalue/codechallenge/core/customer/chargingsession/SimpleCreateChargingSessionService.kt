@@ -11,6 +11,7 @@ import java.time.Instant
  * Creates new Charging Session.
  * This implementation doesn't check the ownership of the Charge Point or RFID Tag.
  * Any existing Charge Point or Tag are allowed to start Charging Session.
+ * This implementation doesn't velidates the meter value to match with the previous session.
  */
 open class SimpleCreateChargingSessionService(
     private val chargePointRepository: GetChargePointRepository,
@@ -20,7 +21,12 @@ open class SimpleCreateChargingSessionService(
 ): CreateChargingSessionService {
 
     @Transactional
-    override fun createNewSession(chargePointId: String, connectorNumber: String, rfidTagNumber: String): ChargingSessionModel {
+    override fun createNewSession(
+        chargePointId: String,
+        connectorNumber: String,
+        rfidTagNumber: String,
+        meterValue: Int,
+    ): ChargingSessionModel {
         val now = Instant.now()
 
         val point = chargePointRepository.getChargePointWithConnectors(chargePointId = chargePointId)
@@ -38,6 +44,7 @@ open class SimpleCreateChargingSessionService(
             sessionId = sessionId,
             time = now,
             type = "START",
+            meterValue = meterValue,
         )
 
         return ChargingSessionModel(
@@ -49,6 +56,7 @@ open class SimpleCreateChargingSessionService(
                     id = eventId,
                     time = now,
                     type = "START",
+                    meterValue = meterValue,
                 )
             )
         )

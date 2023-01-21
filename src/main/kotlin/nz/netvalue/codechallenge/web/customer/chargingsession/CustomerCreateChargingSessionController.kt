@@ -29,7 +29,8 @@ class CustomerCreateChargingSessionController(
         val session = service.createNewSession(
             chargePointId = form.chargePointId,
             connectorNumber = form.connectorNumber.toString(),
-            rfidTagNumber = form.rfidTagNumber
+            rfidTagNumber = form.rfidTagNumber,
+            meterValue = form.meterValue,
         )
         return ResponseView(
             result = session.toView()
@@ -42,4 +43,5 @@ data class CreateChargingSessionForm(
     val chargePointId: String,
     val connectorNumber: Int,
     val rfidTagNumber: String,
+    val meterValue: Int,
 )
