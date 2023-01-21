@@ -57,3 +57,25 @@ Content-Type: application/json
   "rfidTagNumber": "NUMBER",
   "meterValue": 123
 }
+
+### POST /customer/charging-sessions/{}/end (admin)
+POST http://localhost:8080/customer/charging-sessions/test_session/end
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQURNSU4iXX0.XEs2S3ST_qO67gll4F8voI4DyzUGKCzsut9et5IDeWA
+
+### POST /customer/charging-sessions/{}/end (customer, invalid id)
+POST http://localhost:8080/customer/charging-sessions/xxx/end
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQ1VTVE9NRVIiXX0.CGNqJnXXTVHs3umK42FNhDP1UiUEBsUhAdbELFPFsGQ
+Content-Type: application/json
+
+{
+  "meterValue": 456
+}
+
+### POST /customer/charging-sessions/{}/end (customer, invalid id)
+POST http://localhost:8080/customer/charging-sessions/test_session/end
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdXN0b21lciIsImV4cCI6NDEzMjk0NDAwMCwicm9sZXMiOlsiQ1VTVE9NRVIiXX0.CGNqJnXXTVHs3umK42FNhDP1UiUEBsUhAdbELFPFsGQ
+Content-Type: application/json
+
+{
+  "meterValue": 456
+}

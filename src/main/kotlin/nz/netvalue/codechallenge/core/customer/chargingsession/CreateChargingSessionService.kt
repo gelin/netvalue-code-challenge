@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 interface CreateChargingSessionService {
     /**
      * Creates and starts new session for specified Charge Point, Connector and RFID Tag.
-     * @param chargePointId id of the Charging Point
+     * @param chargePointId id of the Charge Point
      * @param connectorNumber number of the connector
      * @param rfidTagNumber unique number of the RFID tag
      * @param meterValue watts meter value at the session start

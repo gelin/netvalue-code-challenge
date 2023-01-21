@@ -128,14 +128,14 @@ class SimpleCreateChargingSessionServiceTest {
     fun testCreateNewSession_shouldCreateSessionAndEvent() {
         val now = Instant.now()
 
-        val session = service.createNewSession("POINT_1", "1", "TAG_NUMBER", 123)
+        val result = service.createNewSession("POINT_1", "1", "TAG_NUMBER", 123)
 
         verify(chargePointRepository).getChargePointWithConnectors(eq("POINT_1"))
         verify(rfidTagRepository).getRfidTagByNumber(eq("TAG_NUMBER"))
 
         verify(sessionRepository).createNewChargingSession(eq("CONNECTOR_1"), eq("TAG_1"))
         // TODO: meter value
-        verify(sessionEventRepository).createSessionEvent(eq("SESSION_1"), argThat { !isBefore(now) }, eq("START"), anyOrNull(), anyOrNull())
+        verify(sessionEventRepository).createSessionEvent(eq("SESSION_1"), argThat { !isBefore(now) }, eq("START"), eq(123), anyOrNull())
 
         assertEquals(ChargingSessionModel(
             id = "SESSION_1",
@@ -159,13 +159,13 @@ class SimpleCreateChargingSessionServiceTest {
             events = listOf(
                 ChargingSessionEventModel(
                     id = "EVENT_1",
-                    time = session.events[0].time,
+                    time = result.events[0].time,
                     type = "START",
                     meterValue = 123,
                 )
             )
-        ), session)
-        assertThat(session.events[0].time, greaterThanOrEqualTo(now))
+        ), result)
+        assertThat(result.events[0].time, greaterThanOrEqualTo(now))
     }
 
 }

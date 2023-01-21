@@ -17,18 +17,18 @@ import java.time.ZoneId
 class AdminChargingSessionConfig {
 
     @Bean
-    fun chargingSessionRepository(
-        jdbc: JdbcOperations
-    ): ListChargingSessionsRepository {
-        return H2ListChargingSessionsRepository(jdbc = jdbc)
-    }
-
-    @Bean
     fun chargingSessionService(
         repository: ListChargingSessionsRepository,
         @Value("\${system.timezone:UTC}") timezone: ZoneId
     ): ListChargingSessionsService {
         return SimpleListChargingSessionsService(repository, timezone)
+    }
+
+    @Bean
+    fun chargingSessionRepository(
+        jdbc: JdbcOperations
+    ): ListChargingSessionsRepository {
+        return H2ListChargingSessionsRepository(jdbc = jdbc)
     }
 
 }

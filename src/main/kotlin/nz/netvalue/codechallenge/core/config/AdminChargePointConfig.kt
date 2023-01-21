@@ -17,6 +17,17 @@ import org.springframework.jdbc.core.JdbcOperations
 class AdminChargePointConfig {
 
     @Bean
+    fun createChargePointConnectorService(
+        pointRepository: GetChargePointRepository,
+        connectorRepository: CreateConnectorRepository
+    ): CreateChargePointConnectorService {
+        return AutoAssigningNumberCreateChargePointConnectorService(
+            chargePointRepository = pointRepository,
+            connectorRepository = connectorRepository
+        )
+    }
+
+    @Bean
     fun getChargePointRepository(
         jdbc: JdbcOperations
     ): GetChargePointRepository {
@@ -28,17 +39,6 @@ class AdminChargePointConfig {
         jdbc: JdbcOperations
     ): CreateConnectorRepository {
         return H2CreateConnectorRepository(jdbc = jdbc)
-    }
-
-    @Bean
-    fun createChargePointConnectorService(
-        pointRepository: GetChargePointRepository,
-        connectorRepository: CreateConnectorRepository
-    ): CreateChargePointConnectorService {
-        return AutoAssigningNumberCreateChargePointConnectorService(
-            chargePointRepository = pointRepository,
-            connectorRepository = connectorRepository
-        )
     }
 
 }

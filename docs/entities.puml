@@ -1,5 +1,7 @@
 @startuml
 
+'TODO: does the session belongs to a customer who started it?
+
 title Database entities
 
 class User {
