@@ -1,5 +1,7 @@
 package nz.netvalue.codechallenge.web.customer.chargingsession
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nz.netvalue.codechallenge.core.customer.chargingsession.EndChargingSessionService
 import nz.netvalue.codechallenge.web.security.AuthRoleRequired
 import nz.netvalue.codechallenge.web.view.ChargingSessionView
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("/customer/charging-sessions")
+@SecurityRequirement(name = "bearer")
 class CustomerEndChargingSessionController(
     private val service: EndChargingSessionService
 ) {
@@ -22,9 +25,12 @@ class CustomerEndChargingSessionController(
      * @param form form
      */
     // TODO: if another rules of the session termination are required, the API may be changed
-    @PostMapping("{sessionId}/end")
+    @PostMapping("{sessionId}/end", consumes = ["application/json"], produces = ["application/json"])
     @AuthRoleRequired("CUSTOMER")
-    fun createSession(
+    @Operation(operationId = "customer-end-charging-sessions",
+        description = "Ends the Charging Session",
+        tags = ["customer", "charging-session"])
+    fun endSession(
         @PathVariable("sessionId") sessionId: String,
         @RequestBody form: EndChargingSessionForm
     ): ResponseView<ChargingSessionView?> {

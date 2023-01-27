@@ -29,6 +29,9 @@ The database is created as `data.*.db` files in the current directory by default
 
 ## REST API
 
+More detailed OpenAPI specification and Swagger UI are available when you run the app.
+On http://localhost:8080 by default: http://localhost:8080/swagger-ui/index.html and http://localhost:8080/v3/api-docs.
+
 ### Authorization
 
 This version of the app accepts JWT tokens only. But it has no methods to retrieve the token for simplicity.

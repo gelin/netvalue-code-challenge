@@ -1,5 +1,7 @@
 package nz.netvalue.codechallenge.web.admin.chargingsession
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import nz.netvalue.codechallenge.core.admin.chargingsession.*
 import nz.netvalue.codechallenge.web.converter.toLocalDateTime
 import nz.netvalue.codechallenge.web.security.AuthRoleRequired
@@ -17,6 +19,7 @@ import java.time.LocalTime
  */
 @RestController
 @RequestMapping("/admin/charging-sessions")
+@SecurityRequirement(name = "bearer")
 class AdminListChargingSessionsController(
     private val service: ListChargingSessionsService
 ) {
@@ -26,8 +29,11 @@ class AdminListChargingSessionsController(
      * @param from from date, parsed with [toLocalDateTime]
      * @param till till date, parsed with [toLocalDateTime]
      */
-    @GetMapping
+    @GetMapping(produces = ["application/json"])
     @AuthRoleRequired("ADMIN")
+    @Operation(operationId = "admin-list-charging-sessions",
+        description = "Returns list of all charging sessions",
+        tags = ["admin", "charging-session"])
     fun listChargingSessions(
         @RequestParam(required = false) from: String?,
         @RequestParam(required = false) till: String?

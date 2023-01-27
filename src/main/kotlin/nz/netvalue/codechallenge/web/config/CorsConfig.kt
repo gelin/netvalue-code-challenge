@@ -26,7 +26,7 @@ import java.util.function.Consumer
  * </dl>
  */
 @Configuration
-class CorsConfiguration {
+class CorsConfig {
 
     @Value("#{'\${CORS_ALLOWED_ORIGINS:*}'.split('\\s*,\\s*')}")
     private val allowedOrigins: Set<String> = HashSet(setOf("*"))

@@ -1,5 +1,6 @@
 package nz.netvalue.codechallenge.web.version
 
+import io.swagger.v3.oas.annotations.Operation
 import nz.netvalue.codechallenge.core.version.VersionModel
 import nz.netvalue.codechallenge.core.version.VersionRepository
 import nz.netvalue.codechallenge.web.view.ResponseView
@@ -16,7 +17,10 @@ class VersionController(
     private val repository: VersionRepository
 ) {
 
-    @GetMapping
+    @GetMapping(produces = ["application/json"])
+    @Operation(operationId = "version",
+        description = "Shows the current app and database version",
+        tags = ["util"])
     fun getVersion(): ResponseView<VersionView> {
         return ResponseView(result = repository.getVersion().toView())
     }
